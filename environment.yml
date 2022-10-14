@@ -1,0 +1,14 @@
+
+name: sspcd
+channels:
+  - defaults
+  - pytorch
+  - conda-forge
+dependencies:
+  - python=3.7
+  - numpy
+  - scipy
+  - tqdm
+  - h5py
+  - jupyterlab
+  - matplotlib
