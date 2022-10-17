@@ -24,7 +24,6 @@ def parse_args():
     '''PARAMETERS'''
     parser = argparse.ArgumentParser('self supervised parameters')
     parser.add_argument('--feature_dim', default=128, type=int, help='Feature dim for latent vector')
-    parser.add_argument('--feature_transform', action='store_true', help='Feature transform in pointnet')
     parser.add_argument('--temperature', default=0.5, type=float, help='Temperature used in softmax')
     parser.add_argument('--batch_size', default=32, type=int, help='Number of images in each mini-batch')
     parser.add_argument('--num_views', default=12, type=int, help='number of views image')
@@ -60,7 +59,7 @@ if __name__ == '__main__':
     print(args)
     # define model
     if args.model =='pointnet':
-        net3d = PointNet_point_global(input_channels=3, feature_dim=args.feature_dim, feature_transform=args.feature_transform)
+        net3d = PointNet_point_global(input_channels=3, feature_dim=args.feature_dim, feature_transform=True)
         net3d.cuda()
     elif args.model =='dgcnn':
         net3d = DGCNN_point_global(args)
@@ -111,8 +110,7 @@ if __name__ == '__main__':
             global_feat2d, pixel_feat2d = net2d(images)
             if args.model=='pointnet':
                 global_feat3d, point_feat3d, T2 = net3d(point_cloud)
-                if args.feature_transform:
-                    loss_reg = feature_transform_regularizer(T2)*0.001
+                loss_reg = feature_transform_regularizer(T2)*0.001
             elif args.model=='dgcnn':
                 point_cloud = point_cloud.transpose(2,1)
                 global_feat3d, point_feat3d = net3d(point_cloud)

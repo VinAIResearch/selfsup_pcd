@@ -31,7 +31,7 @@ These improved models outperform existing state-of-the-art methods on various da
 The codebase is tested on
 - Ubuntu
 - CUDA 11.0
-
+- [MinkowskiEngine](https://github.com/NVIDIA/MinkowskiEngine) v.0.5.0
 ### Installation
 
 - Clone this repo:
@@ -43,6 +43,8 @@ cd selfsup_pcd
 - Install dependencies:
 ```
 conda env create -f environment.yml
+conda activate sspcd
+Download code from https://github.com/NVIDIA/MinkowskiEngine/releases/tag/v0.5.0, compile and install MinkowskiEngine.
 ```
 
 ### Datasets
