@@ -17,7 +17,15 @@ VinAI Research, Vietnam
 Recently, great progress has been made in 3D deep learning with the emergence of deep neural networks specifically designed for 3D point clouds. These networks are often trained from scratch or from pre-trained models learned purely from point cloud data. Inspired by the success of deep learning in the image domain, we devise a novel pre-training technique for better model initialization by utilizing the multi-view rendering of the 3D data. Our pre-training is self-supervised by a local pixel/point level correspondence loss computed from perspective projection and a global image/point cloud level loss based on knowledge distillation, thus effectively improving upon popular point cloud networks, including PointNet, DGCNN and SR-UNet. 
 These improved models outperform existing state-of-the-art methods on various datasets and downstream tasks. We also analyze the benefits of synthetic and real data for pre-training, and observe that pre-training on synthetic data is also useful for high-level downstream tasks.
 
-
+```bibtex
+@inproceedings{dinh2021hyperinverter,
+    title={Self-Supervised Learning with Multi-View Rendering for 3D Point Cloud Analysis},
+    author={Bach Tran and Binh-Son Hua and Anh Tuan Tran and Minh Hoai},
+    booktitle={Proceedings of the Asian Conference on Computer Vision (ACCV)},
+    year={2022}
+}
+```
+**Please CITE** our paper whenever our model implementation is used to help produce published results or incorporated into other software.
 
 ## Getting Started
 The codebase is tested on
