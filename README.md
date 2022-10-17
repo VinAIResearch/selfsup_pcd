@@ -18,7 +18,7 @@ Recently, great progress has been made in 3D deep learning with the emergence of
 These improved models outperform existing state-of-the-art methods on various datasets and downstream tasks. We also analyze the benefits of synthetic and real data for pre-training, and observe that pre-training on synthetic data is also useful for high-level downstream tasks.
 
 ```bibtex
-@inproceedings{dinh2021hyperinverter,
+@inproceedings{tran2022selfsup,
     title={Self-Supervised Learning with Multi-View Rendering for 3D Point Cloud Analysis},
     author={Bach Tran and Binh-Son Hua and Anh Tuan Tran and Minh Hoai},
     booktitle={Proceedings of the Asian Conference on Computer Vision (ACCV)},
