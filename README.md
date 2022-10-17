@@ -1,5 +1,5 @@
 # selfsup_pcd
-##### Table of contents
+#### Table of contents
 1. [Getting Started](#Getting-Started)
 2. [Experiments](#Experiments)
 3. [Acknowledgments](#Acknowledgments)
