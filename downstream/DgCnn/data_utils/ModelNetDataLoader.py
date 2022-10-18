@@ -1,26 +1,11 @@
 import glob
-import os
 import os.path
-import sys
 
 import h5py
 import numpy as np
 import torch
 import torch.utils.data as data
-
-
-BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-sys.path.append(BASE_DIR)
-sys.path.append(os.path.join(BASE_DIR, "models"))
-sys.path.append(os.path.join(BASE_DIR, "utils"))
-sys.path.append(os.path.join(BASE_DIR, "data_utils"))
-from data_utils import (
-    center_point_cloud,
-    jitter_point_cloud,
-    normalize_point_cloud,
-    rotate_point_cloud,
-    translate_pointcloud,
-)
+from data_utils import center_point_cloud, normalize_point_cloud, translate_pointcloud
 
 
 class ModelNetDataset_H5PY(data.Dataset):
@@ -72,7 +57,6 @@ class ModelNetDataset(data.Dataset):
         self.data_augmentation = data_augmentation
         self.cats = {}
         self.test_class = test_class
-        idx = 0
         with open(os.path.join(self.root, "modelnet_id.txt")) as f:
             for line in f:
                 line = line.split("\t")
@@ -106,11 +90,3 @@ class ModelNetDataset(data.Dataset):
 
     def __len__(self):
         return len(self.paths)
-
-
-if __name__ == "__main__":
-    # data = ModelNetDataset_H5PY('/home/ubuntu/modelnet40_ply_hdf5_2048/train.txt', data_augmentation=False)
-    data = ModelNetDataset("/home/ubuntu/ModelNet40_blender_sampling_1024", data_augmentation=False)
-    point, cls = data[9000]
-
-    print(point, cls)

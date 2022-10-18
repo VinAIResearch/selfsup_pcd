@@ -1,28 +1,17 @@
 import argparse
+import json
 import os
-import sys
 
-import numpy as np
 import torch
 import torch.nn.functional as F
-from torch.utils.data import DataLoader
-from tqdm import tqdm
-
-
-BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-sys.path.append(BASE_DIR)
-sys.path.append(os.path.join(BASE_DIR, "models"))
-sys.path.append(os.path.join(BASE_DIR, "utils"))
-sys.path.append(os.path.join(BASE_DIR, "data_utils"))
-
-import json
-
 from dgcnn_utils import DGCNN_point_global
-from ModelNetDataLoader import ModelNetSSL_MVDataset, ModelNetSSLDataset
+from ModelNetDataLoader import ModelNetSSLDataset
 from pointnet_utils import PointNet_point_global, feature_transform_regularizer
-from resnet import Model2D_MV, Model2D_pixel
+from resnet import Model2D_pixel
 from torch import optim
 from torch.optim.lr_scheduler import CosineAnnealingLR, StepLR
+from torch.utils.data import DataLoader
+from tqdm import tqdm
 from utils import contrastive_loss
 
 

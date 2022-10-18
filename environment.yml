@@ -2,7 +2,7 @@
 name: sspcd
 channels:
   - defaults
-  - pytorch=1.9.0
+  - pytorch
   - conda-forge
 dependencies:
   - python=3.7
@@ -12,14 +12,20 @@ dependencies:
   - h5py
   - jupyterlab
   - matplotlib
-  - json
   - pillow
   - glob2
   - argparse
-  - open3d
   - tensorboardX
-  - future-fstrings
   - easydict
   - joblib
   - scikit-learn
-  - datetime
+  - pip
+  - pip:
+    - datetime
+    - open3d
+    - json
+    - future-fstrings
+    - pytorch=1.7.1
+    - torchvision=0.8.2
+    - torchaudio=0.7.2
+    - cudatoolkit=11.0

@@ -1,7 +1,5 @@
 import argparse
-import random
 
-import numpy as np
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
@@ -21,7 +19,7 @@ def get_graph_feature(x, k=20, idx=None, dim9=False):
     num_points = x.size(2)
     x = x.view(batch_size, -1, num_points)
     if idx is None:
-        if dim9 == False:
+        if not dim9:
             idx = knn(x, k=k)  # (batch_size, num_points, k)
         else:
             idx = knn(x[:, 6:], k=k)
@@ -141,7 +139,6 @@ class DGCNN_point(nn.Module):
         )
 
     def forward(self, x):
-        batch_size = x.size(0)
         x = get_graph_feature(x, k=self.k)  # (batch_size, 3, num_points) -> (batch_size, 3*2, num_points, k)
         x = self.conv1(x)  # (batch_size, 3*2, num_points, k) -> (batch_size, 64, num_points, k)
         x1 = x.max(dim=-1, keepdim=False)[0]  # (batch_size, 64, num_points, k) -> (batch_size, 64, num_points)

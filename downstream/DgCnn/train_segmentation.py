@@ -1,25 +1,13 @@
 import argparse
 import os
 import random
-import sys
-
 import numpy as np
 import torch
 import torch.optim as optim
 import torch.utils.data
 from torch.utils.tensorboard import SummaryWriter
-
-
-BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-sys.path.append(BASE_DIR)
-sys.path.append(os.path.join(BASE_DIR, "models"))
-sys.path.append(os.path.join(BASE_DIR, "utils"))
-sys.path.append(os.path.join(BASE_DIR, "data_utils"))
-
 import json
-
 import sklearn.metrics as metrics
-import torch.nn.functional as F
 from dgcnn_sem_segmentation import DGCNN, get_loss
 from S3DISDataLoader import S3DISDataset
 from torch.optim.lr_scheduler import CosineAnnealingLR, StepLR
@@ -62,7 +50,7 @@ def parse_args():
 def train():
     args = parse_args()
     print(args.manualSeed)
-    if args.manualSeed != None:
+    if args.manualSeed is not None:
         random.seed(args.manualSeed)
         torch.manual_seed(args.manualSeed)
         np.random.seed(args.manualSeed)
@@ -127,8 +115,6 @@ def train():
         train_pred_cls = []
         train_true_seg = []
         train_pred_seg = []
-        train_label_seg = []
-
         classifier.train()
         for i, data in tqdm(enumerate(dataloader, 0)):
             points, seg = data
@@ -157,10 +143,10 @@ def train():
         if args.scheduler == "cos":
             scheduler.step()
         elif args.scheduler == "step":
-            if opt.param_groups[0]["lr"] > 1e-5:
+            if optimizer.param_groups[0]["lr"] > 1e-5:
                 scheduler.step()
-            if opt.param_groups[0]["lr"] < 1e-5:
-                for param_group in opt.param_groups:
+            if optimizer.param_groups[0]["lr"] < 1e-5:
+                for param_group in optimizer.param_groups:
                     param_group["lr"] = 1e-5
         train_true_cls = np.concatenate(train_true_cls)
         train_pred_cls = np.concatenate(train_pred_cls)
@@ -176,7 +162,7 @@ def train():
         writer.add_scalar("IoU/train", train_ious, epoch)
 
     torch.save(classifier.state_dict(), "%s/seg_model.pth" % (path_checkpoints))
-    ## benchmark mIOU
+    # benchmark mIOU
     with torch.no_grad():
         total_loss = 0.0
         total_seen = 0.0

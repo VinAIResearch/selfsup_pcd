@@ -1,14 +1,11 @@
 import os
-import sys
 
-
-BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-sys.path.append(BASE_DIR)
 import h5py
 import numpy as np
-from plyfile import PlyData, PlyElement, PlyParseError, PlyProperty, make2d
+from plyfile import PlyData, PlyElement
 
 
+BASE_DIR = "path to folder"
 SAMPLING_BIN = os.path.join(BASE_DIR, "third_party/mesh_sampling/build/pcsample")
 
 SAMPLING_POINT_NUM = 2048

@@ -24,19 +24,16 @@ xml_head = """
             <lookat origin="3,3,0" target="0,0,0" up="0,0,1"/>
         </transform>
         <float name="fov" value="25"/>
-        
         <sampler type="ldsampler">
             <integer name="sampleCount" value="256"/>
         </sampler>
     </sensor>
-    
     <bsdf type="roughplastic" id="surfaceMaterial">
         <string name="distribution" value="ggx"/>
         <float name="alpha" value="0.05"/>
         <float name="intIOR" value="1.46"/>
         <rgb name="diffuseReflectance" value="1,1,1"/> <!-- default 0.5 -->
     </bsdf>
-    
 """
 
 xml_ball_segment = """
@@ -59,7 +56,6 @@ xml_tail = """
             <translate x="0" y="0" z="-0.5"/>
         </transform>
     </shape>
-    
     <shape type="rectangle">
         <transform name="toWorld">
             <scale x="10" y="10" z="1"/>

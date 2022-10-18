@@ -1,9 +1,7 @@
 # Ref https://github.com/AnTao97/dgcnn.pytorch/blob/master/util.py
 # Ref https://github.com/hansen7/OcCo/blob/master/OcCo_Torch/utils/Torch_Utility.py
-import numpy as np
 import torch
 import torch.nn as nn
-import torch.nn.functional as F
 
 
 def contrastive_loss(feat_1, feat_2, temperature=0.5):

@@ -62,13 +62,8 @@ def center_point_cloud(pc):
 
 def farthest_pair_sample(point, dict_pair, num_pair=512):
     point_id = list(dict_pair.keys())
-    # print(point_id)
     N = len(point_id)
     xyz = point[point_id]
-    # print(xyz)
-    # cfps, farthest = farthest_point_sample(xyz, N)
-    # print(cfps)
-
     centroids = np.zeros((num_pair,))
     distance = np.ones((N,)) * 1e10
     farthest = np.random.randint(0, N)
@@ -91,14 +86,12 @@ def farthest_pair_sample(point, dict_pair, num_pair=512):
         distance[mask] = dist[mask]
         farthest = np.argmax(distance, -1)
         id += 1
-    # print(centroids)
     return list_id
 
 
 def separate_point_sample(point, dict_pair, num_pair=512):
     point_id = list(dict_pair.keys())
     np.random.shuffle(point_id)
-    # print(point_id)
     N = len(point_id)
     xyz = point[point_id]
     if N > num_pair:
@@ -129,7 +122,7 @@ def separate_point_sample(point, dict_pair, num_pair=512):
             for key in point_id:
                 try:
                     list_id.append(dict_pair[key].pop())
-                except:
+                except Exception:
                     continue
                 curr_pair += 1
                 if curr_pair >= num_pair:

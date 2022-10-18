@@ -1,16 +1,9 @@
 # Ref https://github.com/charlesq34/pointnet/blob/master/sem_seg/gen_indoor3d_h5.py
 import os
-import sys
 
-import numpy as np
-
-
-BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-ROOT_DIR = os.path.dirname(BASE_DIR)
-sys.path.append(BASE_DIR)
-sys.path.append(os.path.join(ROOT_DIR, "utils"))
 import data_prep_util
 import indoor3d_util
+import numpy as np
 
 
 # Constants
@@ -23,7 +16,7 @@ data_dim = [NUM_POINT, 9]
 label_dim = [NUM_POINT]
 data_dtype = "float32"
 label_dtype = "uint8"
-
+BASE_DIR = "path to folder"
 # Set paths
 filelist = os.path.join(BASE_DIR, "meta/all_data_label.txt")
 data_label_files = [os.path.join(indoor3d_data_dir, line.rstrip()) for line in open(filelist)]

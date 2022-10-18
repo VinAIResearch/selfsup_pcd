@@ -165,9 +165,3 @@ def convert_data(folder_path="shapenet_part_hdf5_data"):
             np.savetxt(path_seg, seg)
             np.savetxt(path_points, points)
     print(cat_index)
-
-
-if __name__ == "__main__":
-    d = ShapenetPartSegDataset()
-    print(len(d))
-    print(d[100][0].size())

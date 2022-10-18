@@ -1,25 +1,13 @@
 import argparse
 import os
 import random
-import sys
-
 import numpy as np
 import torch
 import torch.optim as optim
 import torch.utils.data
 from torch.utils.tensorboard import SummaryWriter
-
-
-BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-sys.path.append(BASE_DIR)
-sys.path.append(os.path.join(BASE_DIR, "models"))
-sys.path.append(os.path.join(BASE_DIR, "utils"))
-sys.path.append(os.path.join(BASE_DIR, "data_utils"))
-
 import json
-
 import sklearn.metrics as metrics
-import torch.nn.functional as F
 from dgcnn_classification import DGCNN, get_loss
 from ModelNetDataLoader import ModelNetDataset, ModelNetDataset_H5PY
 from ScanObjectNNDataLoader import ScanObjectNNDataset
@@ -65,7 +53,7 @@ def parse_args():
 def train():
     args = parse_args()
     print(args.manualSeed)
-    if args.manualSeed != None:
+    if args.manualSeed is not None:
         random.seed(args.manualSeed)
         torch.manual_seed(args.manualSeed)
         np.random.seed(args.manualSeed)
@@ -234,16 +222,15 @@ def train():
         if args.scheduler == "cos":
             scheduler.step()
         elif args.scheduler == "step":
-            if opt.param_groups[0]["lr"] > 1e-5:
+            if optimizer.param_groups[0]["lr"] > 1e-5:
                 scheduler.step()
-            if opt.param_groups[0]["lr"] < 1e-5:
-                for param_group in opt.param_groups:
+            if optimizer.param_groups[0]["lr"] < 1e-5:
+                for param_group in optimizer.param_groups:
                     param_group["lr"] = 1e-5
         train_true = np.concatenate(train_true)
         train_pred = np.concatenate(train_pred)
         train_acc = metrics.accuracy_score(train_true, train_pred)
-        train_macc = metrics.balanced_accuracy_score(train_true, train_pred)
-        ## Test
+        # Test
         with torch.no_grad():
             test_total_loss = 0.0
             test_total_point = 0.0
@@ -281,7 +268,7 @@ def train():
         writer.add_scalar("Acc/train", train_acc, epoch)
         writer.add_scalar("Acc/test", test_acc, epoch)
     torch.save(classifier.state_dict(), "%s/cls_model.pth" % (path_checkpoints))
-    ## Test
+    # Test
     with torch.no_grad():
         results = {}
         total_loss = 0.0

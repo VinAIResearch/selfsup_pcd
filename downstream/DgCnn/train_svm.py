@@ -1,29 +1,13 @@
 import argparse
 import datetime
-import os
-import random
-import sys
-
 import numpy as np
 import torch
-import torch.optim as optim
 import torch.utils.data
-
-
-BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-sys.path.append(BASE_DIR)
-sys.path.append(os.path.join(BASE_DIR, "models"))
-sys.path.append(os.path.join(BASE_DIR, "utils"))
-sys.path.append(os.path.join(BASE_DIR, "data_utils"))
-
-import json
-
-import torch.nn.functional as F
 from dgcnn_svm import DGCNN, DGCNN_jigsaw
 from ModelNetDataLoader import ModelNetDataset, ModelNetDataset_H5PY
 from ScanObjectNNDataLoader import ScanObjectNNDataset
 from sklearn import metrics, svm
-from sklearn.model_selection import GridSearchCV, RandomizedSearchCV
+from sklearn.model_selection import GridSearchCV
 from tqdm import tqdm
 from utils import copy_parameters
 
@@ -108,8 +92,6 @@ def train():
     )
 
     print(len(dataset), len(test_dataset))
-    # num_classes = len(dataset.classes)
-    num_classes = dataset.num_classes
     if args.jigsaw:
         classifier = DGCNN_jigsaw(args)
     else:

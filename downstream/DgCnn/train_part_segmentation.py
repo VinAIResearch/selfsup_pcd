@@ -1,30 +1,17 @@
 import argparse
 import os
 import random
-import sys
-
 import numpy as np
 import torch
 import torch.optim as optim
 import torch.utils.data
 from torch.utils.tensorboard import SummaryWriter
-
-
-BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-sys.path.append(BASE_DIR)
-sys.path.append(os.path.join(BASE_DIR, "models"))
-sys.path.append(os.path.join(BASE_DIR, "utils"))
-sys.path.append(os.path.join(BASE_DIR, "data_utils"))
-
 import json
-
-import sklearn.metrics as metrics
-import torch.nn.functional as F
 from dgcnn_part_segmentation import DGCNN, get_loss
 from ShapeNetDataLoader import ShapeNetPartSegDataset
 from torch.optim.lr_scheduler import CosineAnnealingLR, StepLR
 from tqdm import tqdm
-from utils import calculate_shape_IoU, copy_parameters, to_one_hot
+from utils import copy_parameters, to_one_hot
 
 
 def parse_args():
@@ -83,7 +70,7 @@ def parse_args():
 def train():
     args = parse_args()
     print(args.manualSeed)
-    if args.manualSeed != None:
+    if args.manualSeed is not None:
         random.seed(args.manualSeed)
         torch.manual_seed(args.manualSeed)
         np.random.seed(args.manualSeed)
@@ -103,7 +90,6 @@ def train():
     testdataloader = torch.utils.data.DataLoader(test_dataset, batch_size=args.batch_size, shuffle=True, num_workers=8)
 
     print(len(dataset), len(test_dataset))
-    # num_classes = len(dataset.classes)
     num_classes = 16
     num_part_classes = 50
     print("classes", num_classes)
@@ -142,9 +128,6 @@ def train():
     elif args.scheduler == "step":
         scheduler = StepLR(optimizer, step_size=20, gamma=0.5)
 
-    best_acc = 0.0
-    best_epoch = 0
-    test_acc = 0
     for epoch in range(1, args.nepoch + 1):
         total_loss = 0.0
         total_seen = 0.0
@@ -180,10 +163,10 @@ def train():
         if args.scheduler == "cos":
             scheduler.step()
         elif args.scheduler == "step":
-            if opt.param_groups[0]["lr"] > 1e-5:
+            if optimizer.param_groups[0]["lr"] > 1e-5:
                 scheduler.step()
-            if opt.param_groups[0]["lr"] < 1e-5:
-                for param_group in opt.param_groups:
+            if optimizer.param_groups[0]["lr"] < 1e-5:
+                for param_group in optimizer.param_groups:
                     param_group["lr"] = 1e-5
         train_acc = total_correct / total_seen
         print("Epoch %d: loss: %f acc(each point): %f" % (epoch, total_loss, train_acc))

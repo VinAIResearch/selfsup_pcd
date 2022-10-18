@@ -1,21 +1,10 @@
 import glob
 import os
 import os.path
-import sys
 
-import h5py
 import numpy as np
 import torch
 import torch.utils.data as data
-from PIL import Image
-from torchvision import transforms
-
-
-BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-sys.path.append(BASE_DIR)
-sys.path.append(os.path.join(BASE_DIR, "models"))
-sys.path.append(os.path.join(BASE_DIR, "utils"))
-sys.path.append(os.path.join(BASE_DIR, "data_utils"))
 from data_utils import (
     center_point_cloud,
     farthest_pair_sample,
@@ -25,6 +14,8 @@ from data_utils import (
     separate_point_sample,
     translate_pointcloud,
 )
+from PIL import Image
+from torchvision import transforms
 
 
 test_transform = transforms.Compose([transforms.ToTensor()])
@@ -74,7 +65,6 @@ class ModelNetSSLDataset(data.Dataset):
         self.pre_fix = pre_fix
         print(self.pre_fix)
         self.num_point_contrast = num_point_contrast
-        idx = 0
         with open(os.path.join(self.root, "modelnet_id.txt")) as f:
             for line in f:
                 line = line.split("\t")
@@ -110,13 +100,9 @@ class ModelNetSSLDataset(data.Dataset):
 
     def __getitem__(self, index):
         fn = self.paths[index]
-        cls = self.cats[fn.split("/")[-3]]
         point_set = np.loadtxt(fn)[:, [0, 2, 1]]
-        # folder_mv = fn.replace('ModelNet40_blender_sampling_1024','ModelNet40_MV').replace('.txt','.off')
         folder_mv = fn.replace("ModelNet40_blender_sampling_1024", self.pre_fix).replace(".txt", ".off")
         list_image = []
-        # views = np.random.choice([i for i in range(12)], self.num_views, replace=False)
-        # views = [i for i in range(12)]
         views = self.views[index]
         np.random.shuffle(views)
         for i in range(self.num_views):
@@ -138,7 +124,6 @@ class ModelNetSSLDataset(data.Dataset):
             if point_id not in dict_pair:
                 dict_pair[point_id] = []
             dict_pair[point_id].append(i)
-        # print(len(dict_pair))
         # shuffle pixel
         for k in dict_pair.keys():
             np.random.shuffle(dict_pair[k])
@@ -152,7 +137,6 @@ class ModelNetSSLDataset(data.Dataset):
             list_id2pix = list_id2pix[list_id]
         else:
             # random sampling pair
-            # print(list_id2pix.shape[0])
             if list_id2pix.shape[0] < self.num_point_contrast:
                 print("Not enough", list_id2pix.shape[0], fn)
             idx_pts = np.arange(list_id2pix.shape[0])
@@ -181,7 +165,6 @@ class ModelNetSSL_MVDataset(data.Dataset):
         self.split = split
         self.data_augmentation = data_augmentation
         self.cats = {}
-        idx = 0
         with open(os.path.join(self.root, "modelnet_id.txt")) as f:
             for line in f:
                 line = line.split("\t")
@@ -202,7 +185,6 @@ class ModelNetSSL_MVDataset(data.Dataset):
 
     def __getitem__(self, index):
         fn = self.paths[index]
-        cls = self.cats[fn.split("/")[-3]]
         point_set = np.loadtxt(fn)[:, [0, 2, 1]]
         folder_mv = fn.replace("ModelNet40_blender_sampling_1024", "ModelNet40_MV").replace(".txt", ".off")
         list_image = []

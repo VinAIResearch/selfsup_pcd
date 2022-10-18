@@ -1,9 +1,3 @@
-import copy
-import math
-import os
-import sys
-
-import numpy as np
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
@@ -24,7 +18,7 @@ def get_graph_feature(x, k=20, idx=None, dim9=False):
     num_points = x.size(2)
     x = x.view(batch_size, -1, num_points)
     if idx is None:
-        if dim9 == False:
+        if not dim9:
             idx = knn(x, k=k)  # (batch_size, num_points, k)
         else:
             idx = knn(x[:, 6:], k=k)

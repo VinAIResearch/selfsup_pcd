@@ -29,7 +29,6 @@ class STN3D(nn.Module):
         )
 
     def forward(self, x):
-        batch_size = x.shape[0]
         num_points = x.shape[2]
         x = self.mlp1(x)
         x = F.max_pool1d(x, num_points).squeeze(2)
@@ -66,7 +65,6 @@ class STN3D3k(nn.Module):
         )
 
     def forward(self, x):
-        batch_size = x.shape[0]
         num_points = x.shape[2]
         x = self.mlp1(x)
         x = F.max_pool1d(x, num_points).squeeze(2)
@@ -113,7 +111,6 @@ class PointNet_global(nn.Module):
         )
 
     def forward(self, x):
-        batch_size = x.shape[0]
         num_points = x.shape[1]
         x = x.transpose(2, 1)
         T1 = self.stn1(x)
@@ -129,10 +126,7 @@ class PointNet_global(nn.Module):
 
         x = F.max_pool1d(x, num_points).squeeze(2)
 
-        # return self.global_project(x), T2
-        # return x, T2
         return self.global_project(x), T2
-        # return x
 
 
 class PointNet_point(nn.Module):
@@ -168,8 +162,6 @@ class PointNet_point(nn.Module):
         )
 
     def forward(self, x):
-        batch_size = x.shape[0]
-        num_points = x.shape[1]
         x = x.transpose(2, 1)
         T1 = self.stn1(x)
         x = torch.bmm(T1, x)
@@ -181,7 +173,6 @@ class PointNet_point(nn.Module):
         else:
             x = self.mlp2(x)
             T2 = None
-        # return self.point_project(x), T1, T2
         return self.point_project(x), T2
 
 
@@ -224,7 +215,6 @@ class PointNet_point_global(nn.Module):
         )
 
     def forward(self, x):
-        batch_size = x.shape[0]
         num_points = x.shape[1]
         x = x.transpose(2, 1)
         T1 = self.stn1(x)
@@ -237,7 +227,6 @@ class PointNet_point_global(nn.Module):
         else:
             x = self.mlp2(x)
             T2 = None
-        # return self.point_project(x), T1, T2
         point_feat = self.point_project(x)
         x = F.max_pool1d(x, num_points).squeeze(2)
         global_feat = self.global_project(x)
@@ -247,16 +236,8 @@ class PointNet_point_global(nn.Module):
 
 def feature_transform_regularizer(trans):
     d = trans.size()[1]
-    batchsize = trans.size()[0]
     I = torch.eye(d)[None, :, :]
     if trans.is_cuda:
         I = I.cuda()
     loss = torch.sum(torch.norm(torch.bmm(trans, trans.transpose(2, 1)) - I, dim=(1, 2)) ** 2) / 2
     return loss
-
-
-if __name__ == "__main__":
-    net = PointNet_point(3, 128)
-    x = torch.rand(2, 1024, 3)
-    p = net(x)
-    print(p[0][:, [2, 2]])
