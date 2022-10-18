@@ -4,10 +4,11 @@
 # LICENSE file in the root directory of this source tree.
 
 ''' Ref: https://github.com/ScanNet/ScanNet/blob/master/BenchmarkScripts '''
+import csv
+import json
 import os
 import sys
-import json
-import csv
+
 
 try:
     import numpy as np

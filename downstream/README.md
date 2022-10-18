@@ -7,6 +7,8 @@
 ## Datasets
 For [S3DIS](http://buildingparser.stanford.edu/dataset.html), [ScanNet](http://www.scan-net.org/) and [SUN RGB-D](https://rgbd.cs.princeton.edu/) data processing, we follow the instruction of [Pointcontrast](https://github.com/facebookresearch/PointContrast.git)
 ## Experiments
+For all experiments with SR-UNet backbone, we use published code from [PointContrast](https://github.com/facebookresearch/PointContrast/tree/main/downstream) with little modifications (to run on [MinkowskiEngine](https://github.com/NVIDIA/MinkowskiEngine) v.0.5.0).
+
 ### Classification
 
 Run the following command to evaluate pre-trained models with different backbones.
@@ -65,7 +67,7 @@ python train_segmentation.py \
 --model_path path_to_pre_trained_model \ # path to pre_trained models
 --test_area 6 \ # test area id, 1,2,3,4,5,6
 
-cd downstream/SRUNet/semseg
+cd path_to_PointContrast/semseg
 # setting for ScanNet
 DATAPATH=path_to_folder_dataset 
 PRETRAIN=path_to_pre_trained_model
@@ -134,7 +136,7 @@ python ddp_main.py \
 
 Run the following command to evaluate pre-trained models with SR-UNet backbone.
 ```bash
-cd downstream/SRUNet/votenet_det_new
+cd path_to_PointContrast/votenet_det_new
 PRETRAIN=path_to_pre_trained_model
 export LOGDIR=path_to_results_folder
 mkdir -p $LOGDIR
@@ -166,3 +168,4 @@ python ddp_main.py \
   net.is_train=True \
   net.weights=$PRETRAIN \
 ```
+

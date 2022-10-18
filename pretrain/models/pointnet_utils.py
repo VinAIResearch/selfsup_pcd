@@ -1,7 +1,7 @@
-
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
+
 
 class STN3D(nn.Module):
     def __init__(self, input_channels=3):
@@ -16,7 +16,7 @@ class STN3D(nn.Module):
             nn.ReLU(),
             nn.Conv1d(128, 1024, 1),
             nn.BatchNorm1d(1024),
-            nn.ReLU()
+            nn.ReLU(),
         )
         self.mlp2 = nn.Sequential(
             nn.Linear(1024, 512),
@@ -25,7 +25,7 @@ class STN3D(nn.Module):
             nn.Linear(512, 256),
             nn.BatchNorm1d(256),
             nn.ReLU(),
-            nn.Linear(256, input_channels * input_channels)
+            nn.Linear(256, input_channels * input_channels),
         )
 
     def forward(self, x):
@@ -38,6 +38,7 @@ class STN3D(nn.Module):
         x = x + I
         x = x.view(-1, self.input_channels, self.input_channels)
         return x
+
 
 class STN3D3k(nn.Module):
     def __init__(self, input_channels=3):
@@ -52,7 +53,7 @@ class STN3D3k(nn.Module):
             nn.ReLU(),
             nn.Conv1d(128, 1024, 1),
             nn.BatchNorm1d(1024),
-            nn.ReLU()
+            nn.ReLU(),
         )
         self.mlp2 = nn.Sequential(
             nn.Linear(1024, 512),
@@ -61,7 +62,7 @@ class STN3D3k(nn.Module):
             nn.Linear(512, 256),
             nn.BatchNorm1d(256),
             nn.ReLU(),
-            nn.Linear(256, 3 * 3)
+            nn.Linear(256, 3 * 3),
         )
 
     def forward(self, x):
@@ -74,6 +75,7 @@ class STN3D3k(nn.Module):
         x = x + I
         x = x.view(-1, 3, 3)
         return x
+
 
 class PointNet_global(nn.Module):
     def __init__(self, input_channels, feature_dim=128, feature_transform=False):
@@ -90,7 +92,7 @@ class PointNet_global(nn.Module):
             nn.ReLU(),
             nn.Conv1d(64, 64, 1),
             nn.BatchNorm1d(64),
-            nn.ReLU()
+            nn.ReLU(),
         )
         self.mlp2 = nn.Sequential(
             nn.Conv1d(64, 64, 1),
@@ -101,15 +103,14 @@ class PointNet_global(nn.Module):
             nn.ReLU(),
             nn.Conv1d(128, 1024, 1),
             nn.BatchNorm1d(1024),
-            nn.ReLU()
+            nn.ReLU(),
         )
         self.global_project = nn.Sequential(
-            nn.Linear(1024, 512, bias=False), 
+            nn.Linear(1024, 512, bias=False),
             nn.BatchNorm1d(512),
             nn.ReLU(inplace=True),
-            nn.Linear(512, self.feature_dim, bias=True)
+            nn.Linear(512, self.feature_dim, bias=True),
         )
-
 
     def forward(self, x):
         batch_size = x.shape[0]
@@ -133,6 +134,7 @@ class PointNet_global(nn.Module):
         return self.global_project(x), T2
         # return x
 
+
 class PointNet_point(nn.Module):
     def __init__(self, input_channels, feature_dim=128, feature_transform=False):
         super(PointNet_point, self).__init__()
@@ -148,7 +150,7 @@ class PointNet_point(nn.Module):
             nn.ReLU(),
             nn.Conv1d(64, 64, 1),
             nn.BatchNorm1d(64),
-            nn.ReLU()
+            nn.ReLU(),
         )
         self.mlp2 = nn.Sequential(
             nn.Conv1d(64, 64, 1),
@@ -159,15 +161,11 @@ class PointNet_point(nn.Module):
             nn.ReLU(),
             nn.Conv1d(128, 1024, 1),
             nn.BatchNorm1d(1024),
-            nn.ReLU()
+            nn.ReLU(),
         )
         self.point_project = nn.Sequential(
-            nn.Conv1d(1024, 512, 1),
-            nn.BatchNorm1d(512),
-            nn.ReLU(),
-            nn.Conv1d(512, self.feature_dim, 1)
+            nn.Conv1d(1024, 512, 1), nn.BatchNorm1d(512), nn.ReLU(), nn.Conv1d(512, self.feature_dim, 1)
         )
-
 
     def forward(self, x):
         batch_size = x.shape[0]
@@ -181,10 +179,11 @@ class PointNet_point(nn.Module):
             f = torch.bmm(T2, x)
             x = self.mlp2(f)
         else:
-            x =self.mlp2(x)
+            x = self.mlp2(x)
             T2 = None
         # return self.point_project(x), T1, T2
         return self.point_project(x), T2
+
 
 class PointNet_point_global(nn.Module):
     def __init__(self, input_channels, feature_dim=128, feature_transform=False):
@@ -201,7 +200,7 @@ class PointNet_point_global(nn.Module):
             nn.ReLU(),
             nn.Conv1d(64, 64, 1),
             nn.BatchNorm1d(64),
-            nn.ReLU()
+            nn.ReLU(),
         )
         self.mlp2 = nn.Sequential(
             nn.Conv1d(64, 64, 1),
@@ -212,21 +211,17 @@ class PointNet_point_global(nn.Module):
             nn.ReLU(),
             nn.Conv1d(128, 1024, 1),
             nn.BatchNorm1d(1024),
-            nn.ReLU()
+            nn.ReLU(),
         )
         self.point_project = nn.Sequential(
-            nn.Conv1d(1024, 512, 1),
-            nn.BatchNorm1d(512),
-            nn.ReLU(),
-            nn.Conv1d(512, self.feature_dim, 1)
+            nn.Conv1d(1024, 512, 1), nn.BatchNorm1d(512), nn.ReLU(), nn.Conv1d(512, self.feature_dim, 1)
         )
         self.global_project = nn.Sequential(
-            nn.Linear(1024, 512, bias=False), 
+            nn.Linear(1024, 512, bias=False),
             nn.BatchNorm1d(512),
             nn.ReLU(inplace=True),
-            nn.Linear(512, self.feature_dim, bias=True)
+            nn.Linear(512, self.feature_dim, bias=True),
         )
-
 
     def forward(self, x):
         batch_size = x.shape[0]
@@ -240,7 +235,7 @@ class PointNet_point_global(nn.Module):
             f = torch.bmm(T2, x)
             x = self.mlp2(f)
         else:
-            x =self.mlp2(x)
+            x = self.mlp2(x)
             T2 = None
         # return self.point_project(x), T1, T2
         point_feat = self.point_project(x)
@@ -248,16 +243,20 @@ class PointNet_point_global(nn.Module):
         global_feat = self.global_project(x)
 
         return global_feat, point_feat, T2
+
+
 def feature_transform_regularizer(trans):
     d = trans.size()[1]
     batchsize = trans.size()[0]
     I = torch.eye(d)[None, :, :]
     if trans.is_cuda:
         I = I.cuda()
-    loss = torch.sum(torch.norm(torch.bmm(trans, trans.transpose(2,1)) - I, dim=(1,2))**2)/2
+    loss = torch.sum(torch.norm(torch.bmm(trans, trans.transpose(2, 1)) - I, dim=(1, 2)) ** 2) / 2
     return loss
-if __name__=='__main__':
+
+
+if __name__ == "__main__":
     net = PointNet_point(3, 128)
-    x = torch.rand(2,1024, 3)
+    x = torch.rand(2, 1024, 3)
     p = net(x)
-    print(p[0][:, [2,2]])
+    print(p[0][:, [2, 2]])

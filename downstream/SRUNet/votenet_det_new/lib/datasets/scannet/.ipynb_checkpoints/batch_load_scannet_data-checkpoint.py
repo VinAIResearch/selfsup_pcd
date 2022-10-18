@@ -8,12 +8,14 @@ for semantic and instance segmentations
 
 Usage example: python ./batch_load_scannet_data.py
 """
-import os
-import sys
 import datetime
+import os
+import pdb
+import sys
+
 import numpy as np
 from load_scannet_data import export
-import pdb
+
 
 SCANNET_DIR = '/lustre/scratch/client/vinai/users/bachtx12/ScanNetv2/scans'
 TRAIN_SCAN_NAMES = [line.rstrip() for line in open('meta_data/scannet_train.txt')]

@@ -10,15 +10,18 @@ where (cx,cy,cz) is the center point of the box, dx is the x-axis length of the 
 """
 import os
 import sys
+
 import numpy as np
 from torch.utils.data import Dataset
+
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 ROOT_DIR = os.path.dirname(BASE_DIR)
 
+from lib.datasets.scannet.model_util_scannet import ScannetDatasetConfig, rotate_aligned_boxes
 from lib.utils import pc_util
-from lib.datasets.scannet.model_util_scannet import rotate_aligned_boxes
-from lib.datasets.scannet.model_util_scannet import ScannetDatasetConfig
+
+
 DC = ScannetDatasetConfig()
 MAX_NUM_OBJ = 64
 MEAN_COLOR_RGB = np.array([109.8, 97.2, 83.8])

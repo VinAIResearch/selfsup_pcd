@@ -219,9 +219,9 @@
 
 import collections
 from enum import Enum
-import torch.nn as nn
 
 import MinkowskiEngine as ME
+import torch.nn as nn
 
 
 class NormType(Enum):

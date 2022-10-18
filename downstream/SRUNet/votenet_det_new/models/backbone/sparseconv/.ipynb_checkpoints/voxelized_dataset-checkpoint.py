@@ -6,11 +6,12 @@
 
 import os
 import sys
+
 import numpy as np
 import torch
-
 from torch.utils.data import Dataset
 from torch.utils.data._utils.collate import default_collate
+
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 ROOT_DIR = os.path.dirname(BASE_DIR)
@@ -18,6 +19,7 @@ sys.path.append(BASE_DIR)
 sys.path.append(os.path.join(ROOT_DIR, 'utils'))
 
 import MinkowskiEngine as ME
+
 
 class VoxelizationDataset(Dataset):
     """

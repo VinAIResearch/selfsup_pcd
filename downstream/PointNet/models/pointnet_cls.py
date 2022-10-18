@@ -1,14 +1,20 @@
+import os
+import random
+import sys
+
+import numpy as np
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
-import random
-import numpy as np
-import sys, os
+
+
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 sys.path.append(BASE_DIR)
-sys.path.append(os.path.join(BASE_DIR, 'models'))
-sys.path.append(os.path.join(BASE_DIR, 'utils'))
-from pointnet_utils import feature_transform_regularizer, STN3D_input, STN3D_feature
+sys.path.append(os.path.join(BASE_DIR, "models"))
+sys.path.append(os.path.join(BASE_DIR, "utils"))
+from pointnet_utils import STN3D_feature, STN3D_input, feature_transform_regularizer
+
+
 class PointNet(nn.Module):
     def __init__(self, input_channels, num_classes, global_feature=False, feature_transform=True):
         super(PointNet, self).__init__()
@@ -25,7 +31,7 @@ class PointNet(nn.Module):
             nn.ReLU(),
             nn.Conv1d(64, 64, 1),
             nn.BatchNorm1d(64),
-            nn.ReLU()
+            nn.ReLU(),
         )
         self.mlp2 = nn.Sequential(
             nn.Conv1d(64, 64, 1),
@@ -36,7 +42,7 @@ class PointNet(nn.Module):
             nn.ReLU(),
             nn.Conv1d(128, 1024, 1),
             nn.BatchNorm1d(1024),
-            nn.ReLU()
+            nn.ReLU(),
         )
 
         self.classifier = nn.Sequential(
@@ -49,7 +55,7 @@ class PointNet(nn.Module):
             nn.BatchNorm1d(256),
             nn.ReLU(),
             nn.Dropout(p=0.3),
-            nn.Linear(256, self.num_classes)
+            nn.Linear(256, self.num_classes),
         )
 
     def forward(self, x):
@@ -71,6 +77,8 @@ class PointNet(nn.Module):
             return x
         x = self.classifier(x)
         return F.log_softmax(x, dim=1), T1, T2
+
+
 class PointNet_critical(nn.Module):
     def __init__(self, input_channels, feature_transform=True):
         super(PointNet_critical, self).__init__()
@@ -85,7 +93,7 @@ class PointNet_critical(nn.Module):
             nn.ReLU(),
             nn.Conv1d(64, 64, 1),
             nn.BatchNorm1d(64),
-            nn.ReLU()
+            nn.ReLU(),
         )
         self.mlp2 = nn.Sequential(
             nn.Conv1d(64, 64, 1),
@@ -96,7 +104,7 @@ class PointNet_critical(nn.Module):
             nn.ReLU(),
             nn.Conv1d(128, 1024, 1),
             nn.BatchNorm1d(1024),
-            nn.ReLU()
+            nn.ReLU(),
         )
 
     def forward(self, x):
@@ -116,22 +124,25 @@ class PointNet_critical(nn.Module):
         critical_index = torch.argmax(x, dim=2)
         global_feature = F.max_pool1d(x, num_points).squeeze(2)
         return global_feature, critical_index, x
+
+
 def get_loss(pred, target, feat_trans, reg_weight=0.001):
     # cross entropy loss
-    loss_cls = F.nll_loss(pred, target) 
+    loss_cls = F.nll_loss(pred, target)
 
     # regularize loss
     loss_reg = feature_transform_regularizer(feat_trans)
 
-    return loss_cls + loss_reg*reg_weight
-
+    return loss_cls + loss_reg * reg_weight
 
     return 0
-if __name__ == '__main__':
+
+
+if __name__ == "__main__":
     # print(nn.Conv1d(3,64,1).weight.size(),nn.Conv1d(3,64,1).bias.size() )
-    pointnet = PointNet(3,10)
+    pointnet = PointNet(3, 10)
     # pointnet.train()
-    data = torch.ones(4,3,1024)
+    data = torch.ones(4, 3, 1024)
     # print(pointnet(data)[0])
     with torch.no_grad():
         pointnet.eval()

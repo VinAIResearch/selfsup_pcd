@@ -1,12 +1,12 @@
 # Copyright (c) Facebook, Inc. and its affiliates.
-#  
+#
 # This source code is licensed under the MIT license found in the
 # LICENSE file in the root directory of this source tree.
 
 import collections
 
-import numpy as np
 import MinkowskiEngine as ME
+import numpy as np
 from scipy.linalg import expm, norm
 
 
@@ -16,15 +16,16 @@ def M(axis, theta):
 
 
 class Voxelizer:
-
-    def __init__(self,
-                voxel_size=1,
-                clip_bound=None,
-                use_augmentation=False,
-                scale_augmentation_bound=None,
-                rotation_augmentation_bound=None,
-                translation_augmentation_ratio_bound=None,
-                ignore_label=255):
+    def __init__(
+        self,
+        voxel_size=1,
+        clip_bound=None,
+        use_augmentation=False,
+        scale_augmentation_bound=None,
+        rotation_augmentation_bound=None,
+        translation_augmentation_ratio_bound=None,
+        ignore_label=255,
+    ):
         """
         Args:
             voxel_size: side length of a voxel
@@ -93,21 +94,25 @@ class Voxelizer:
             if bound_size.max() < self.clip_bound:
                 return None
             else:
-                clip_inds = ((coords[:, 0] >= (-lim + center[0])) &
-                             (coords[:, 0] < (lim + center[0])) &
-                             (coords[:, 1] >= (-lim + center[1])) &
-                             (coords[:, 1] < (lim + center[1])) &
-                             (coords[:, 2] >= (-lim + center[2])) &
-                             (coords[:, 2] < (lim + center[2])))
+                clip_inds = (
+                    (coords[:, 0] >= (-lim + center[0]))
+                    & (coords[:, 0] < (lim + center[0]))
+                    & (coords[:, 1] >= (-lim + center[1]))
+                    & (coords[:, 1] < (lim + center[1]))
+                    & (coords[:, 2] >= (-lim + center[2]))
+                    & (coords[:, 2] < (lim + center[2]))
+                )
                 return clip_inds
 
         # Clip points outside the limit
-        clip_inds = ((coords[:, 0] >= (lim[0][0] + center[0])) &
-                     (coords[:, 0] < (lim[0][1] + center[0])) &
-                     (coords[:, 1] >= (lim[1][0] + center[1])) &
-                     (coords[:, 1] < (lim[1][1] + center[1])) &
-                     (coords[:, 2] >= (lim[2][0] + center[2])) &
-                     (coords[:, 2] < (lim[2][1] + center[2])))
+        clip_inds = (
+            (coords[:, 0] >= (lim[0][0] + center[0]))
+            & (coords[:, 0] < (lim[0][1] + center[0]))
+            & (coords[:, 1] >= (lim[1][0] + center[1]))
+            & (coords[:, 1] < (lim[1][1] + center[1]))
+            & (coords[:, 2] >= (lim[2][0] + center[2]))
+            & (coords[:, 2] < (lim[2][1] + center[2]))
+        )
         return clip_inds
 
     def voxelize(self, coords, feats, labels, center=None):
@@ -116,8 +121,7 @@ class Voxelizer:
             trans_aug_ratio = np.zeros(3)
             if self.use_augmentation and self.translation_augmentation_ratio_bound is not None:
                 for axis_ind, trans_ratio_bound in enumerate(self.translation_augmentation_ratio_bound):
-                    trans_aug_ratio[axis_ind] = np.random.uniform(
-                        *trans_ratio_bound)
+                    trans_aug_ratio[axis_ind] = np.random.uniform(*trans_ratio_bound)
 
             clip_inds = self.clip(coords, center, trans_aug_ratio)
             if clip_inds is not None:
@@ -132,8 +136,7 @@ class Voxelizer:
         if self.use_augmentation:
             rigid_transformation = M_r @ rigid_transformation
 
-        homo_coords = np.hstack(
-            (coords, np.ones((coords.shape[0], 1), dtype=coords.dtype)))
+        homo_coords = np.hstack((coords, np.ones((coords.shape[0], 1), dtype=coords.dtype)))
         coords_aug = np.floor(homo_coords @ rigid_transformation.T[:, :3])
 
         # Align all coordinates to the origin.
@@ -145,16 +148,12 @@ class Voxelizer:
 
         # key = self.hash(coords_aug)  # floor happens by astype(np.uint64)
         coords_aug, feats, labels = ME.utils.sparse_quantize(
-            coords_aug, feats, labels=labels, ignore_label=self.ignore_label)
+            coords_aug, feats, labels=labels, ignore_label=self.ignore_label
+        )
 
         return coords_aug, feats, labels, rigid_transformation.flatten()
 
-    def voxelize_temporal(self,
-                          coords_t,
-                          feats_t,
-                          labels_t,
-                          centers=None,
-                          return_transformation=False):
+    def voxelize_temporal(self, coords_t, feats_t, labels_t, centers=None, return_transformation=False):
         # Legacy code, remove
         if centers is None:
             centers = [
@@ -179,8 +178,7 @@ class Voxelizer:
                 trans_aug_ratio = np.zeros(3)
                 if self.use_augmentation and self.translation_augmentation_ratio_bound is not None:
                     for axis_ind, trans_ratio_bound in enumerate(self.translation_augmentation_ratio_bound):
-                        trans_aug_ratio[axis_ind] = np.random.uniform(
-                            *trans_ratio_bound)
+                        trans_aug_ratio[axis_ind] = np.random.uniform(*trans_ratio_bound)
 
                 clip_inds = self.clip(coords, center, trans_aug_ratio)
                 if clip_inds is not None:
@@ -189,12 +187,12 @@ class Voxelizer:
                         labels = labels[clip_inds]
             ###################################
 
-            homo_coords = np.hstack(
-                (coords, np.ones((coords.shape[0], 1), dtype=coords.dtype)))
+            homo_coords = np.hstack((coords, np.ones((coords.shape[0], 1), dtype=coords.dtype)))
             coords_aug = np.floor(homo_coords @ rigid_transformation.T)[:, :3]
 
             coords_aug, feats, labels = ME.utils.sparse_quantize(
-                coords_aug, feats, labels=labels, ignore_label=self.ignore_label)
+                coords_aug, feats, labels=labels, ignore_label=self.ignore_label
+            )
 
             coords_tc.append(coords_aug)
             feats_tc.append(feats)
@@ -219,5 +217,5 @@ def test():
     print(voxelizer.voxelize(coords, feats, labels))
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     test()

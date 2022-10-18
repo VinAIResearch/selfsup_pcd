@@ -9,6 +9,7 @@ import os
 from setuptools import setup
 from torch.utils.cpp_extension import BuildExtension, CUDAExtension
 
+
 this_dir = os.path.dirname(os.path.abspath(__file__))
 _ext_src_root = "_ext_src"
 _ext_sources = glob.glob("{}/src/*.cpp".format(_ext_src_root)) + glob.glob(

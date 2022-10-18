@@ -7,12 +7,16 @@
 for semantic and instance segmentations
 """
 
-# python imports
-import math
-import os, sys, argparse
+import argparse
 import inspect
 import json
+
+# python imports
+import math
+import os
 import pdb
+import sys
+
 
 try:
     import numpy as np
@@ -22,6 +26,7 @@ except:
 
 currentdir = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
 import scannet_utils
+
 
 def read_aggregation(filename):
     assert os.path.isfile(filename)

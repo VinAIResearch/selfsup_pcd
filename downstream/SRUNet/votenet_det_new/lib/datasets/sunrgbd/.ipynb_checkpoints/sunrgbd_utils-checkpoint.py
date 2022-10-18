@@ -12,10 +12,12 @@ Updated by Charles R. Qi
 Date: December, 2018
 Note: removed basis loading.
 '''
-import numpy as np
-import cv2
 import os
-import scipy.io as sio # to load .mat files for depth points
+
+import cv2
+import numpy as np
+import scipy.io as sio  # to load .mat files for depth points
+
 
 type2class={'bed':0, 'table':1, 'sofa':2, 'chair':3, 'toilet':4, 'desk':5, 'dresser':6, 'night_stand':7, 'bookshelf':8, 'bathtub':9}
 class2type = {type2class[t]:t for t in type2class}
@@ -314,8 +316,9 @@ def draw_projected_box3d(image, qs, color=(255,255,255), thickness=2):
     return image
 
 
-import pickle
 import gzip
+import pickle
+
 
 def save_zipped_pickle(obj, filename, protocol=-1):
     with gzip.open(filename, 'wb') as f:

@@ -3,12 +3,15 @@
 # This source code is licensed under the MIT license found in the
 # LICENSE file in the root directory of this source tree.
 
-from pathlib import Path
-from plyfile import PlyData, PlyElement
-import numpy as np
-import pandas as pd
 # from lib.pc_utils import read_plyfile, save_point_cloud
 from concurrent.futures import ProcessPoolExecutor
+from pathlib import Path
+
+import numpy as np
+import pandas as pd
+from plyfile import PlyData, PlyElement
+
+
 SCANNET_RAW_PATH = Path('/lustre/scratch/client/vinai/users/bachtx12/ScanNetv2/')
 SCANNET_OUT_PATH = Path('/lustre/scratch/client/vinai/users/bachtx12/scannet_pointcontrast/')
 TRAIN_DEST = 'train'

@@ -4,15 +4,14 @@
 # LICENSE file in the root directory of this source tree.
 
 import glob
-import numpy as np
 import os
 
+import MinkowskiEngine as ME
+import numpy as np
+from lib.pc_utils import save_point_cloud
+from lib.utils import mkdir_p
 from tqdm import tqdm
 
-from lib.utils import mkdir_p
-from lib.pc_utils import save_point_cloud
-
-import MinkowskiEngine as ME
 
 STANFORD_3D_IN_PATH = '/home/ubuntu/Stanford3dDataset/Stanford3dDataset_v1.2_Aligned_Version'
 STANFORD_3D_OUT_PATH = '/home/ubuntu/Stanford3D'

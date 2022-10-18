@@ -1,7 +1,7 @@
-
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
+
 
 class STN3D_input(nn.Module):
     def __init__(self, input_channels=3):
@@ -16,7 +16,7 @@ class STN3D_input(nn.Module):
             nn.ReLU(),
             nn.Conv1d(128, 1024, 1),
             nn.BatchNorm1d(1024),
-            nn.ReLU()
+            nn.ReLU(),
         )
         self.mlp2 = nn.Sequential(
             nn.Linear(1024, 512),
@@ -25,7 +25,7 @@ class STN3D_input(nn.Module):
             nn.Linear(512, 256),
             nn.BatchNorm1d(256),
             nn.ReLU(),
-            nn.Linear(256, 3 * 3)
+            nn.Linear(256, 3 * 3),
         )
 
     def forward(self, x):
@@ -38,6 +38,7 @@ class STN3D_input(nn.Module):
         x = x + I
         x = x.view(-1, 3, 3)
         return x
+
 
 class STN3D_feature(nn.Module):
     def __init__(self, input_channels=64):
@@ -52,7 +53,7 @@ class STN3D_feature(nn.Module):
             nn.ReLU(),
             nn.Conv1d(128, 1024, 1),
             nn.BatchNorm1d(1024),
-            nn.ReLU()
+            nn.ReLU(),
         )
         self.mlp2 = nn.Sequential(
             nn.Linear(1024, 512),
@@ -61,7 +62,7 @@ class STN3D_feature(nn.Module):
             nn.Linear(512, 256),
             nn.BatchNorm1d(256),
             nn.ReLU(),
-            nn.Linear(256, input_channels * input_channels)
+            nn.Linear(256, input_channels * input_channels),
         )
 
     def forward(self, x):
@@ -72,8 +73,9 @@ class STN3D_feature(nn.Module):
         x = self.mlp2(x)
         I = torch.eye(self.input_channels).view(-1).to(x.device)
         x = x + I
-        x = x.view(-1, self.input_channels , self.input_channels )
+        x = x.view(-1, self.input_channels, self.input_channels)
         return x
+
 
 def feature_transform_regularizer(trans):
     d = trans.size()[1]
@@ -81,11 +83,13 @@ def feature_transform_regularizer(trans):
     I = torch.eye(d)[None, :, :]
     if trans.is_cuda:
         I = I.cuda()
-    loss = torch.sum(torch.norm(torch.bmm(trans, trans.transpose(2,1)) - I, dim=(1,2))**2)/2
+    loss = torch.sum(torch.norm(torch.bmm(trans, trans.transpose(2, 1)) - I, dim=(1, 2)) ** 2) / 2
     return loss
-if __name__=='__main__':
+
+
+if __name__ == "__main__":
     stn = STN3D_cv2d(3)
-    x = torch.rand(12,1024, 3)
+    x = torch.rand(12, 1024, 3)
     # cv1 = nn.Conv2d(1,64,(1,3))
     print((stn(x)).size())
     # print(cv1.bias.data.size())

@@ -1,17 +1,18 @@
 import numpy as np
 
+
 def standardize_bbox(pcl):
 
     mins = np.amin(pcl, axis=0)
     maxs = np.amax(pcl, axis=0)
-    center = ( mins + maxs ) / 2.
-    scale = np.amax(maxs-mins)
+    center = (mins + maxs) / 2.0
+    scale = np.amax(maxs - mins)
     print("Center: {}, Scale: {}".format(center, scale))
-    result = ((pcl - center)/scale).astype(np.float32) # [-0.5, 0.5]
+    result = ((pcl - center) / scale).astype(np.float32)  # [-0.5, 0.5]
     return result
 
-xml_head = \
-"""
+
+xml_head = """
 <scene version="0.6.0">
     <integrator type="path">
         <integer name="maxDepth" value="-1"/>
@@ -38,8 +39,7 @@ xml_head = \
     
 """
 
-xml_ball_segment = \
-"""
+xml_ball_segment = """
     <shape type="sphere">
         <float name="radius" value="0.025"/>
         <transform name="toWorld">
@@ -51,8 +51,7 @@ xml_ball_segment = \
     </shape>
 """
 
-xml_tail = \
-"""
+xml_tail = """
     <shape type="rectangle">
         <ref name="bsdf" id="surfaceMaterial"/>
         <transform name="toWorld">
@@ -72,28 +71,30 @@ xml_tail = \
     </shape>
 </scene>
 """
-def colormap(x,y,z):
-    vec = np.array([x,y,z])
-    vec = np.clip(vec, 0.001,1.0)
+
+
+def colormap(x, y, z):
+    vec = np.array([x, y, z])
+    vec = np.clip(vec, 0.001, 1.0)
     norm = np.sqrt(np.sum(vec**2))
     vec /= norm
     return [vec[0], vec[1], vec[2]]
+
+
 def write_file(pcl, file_name):
     xml_segments = [xml_head]
 
     pcl = standardize_bbox(pcl)
-    pcl = pcl[:,[2,0,1]]
-    pcl[:,0] *= -1
-    pcl[:,2] += 0.0125
+    pcl = pcl[:, [2, 0, 1]]
+    pcl[:, 0] *= -1
+    pcl[:, 2] += 0.0125
 
     for i in range(pcl.shape[0]):
-        color = colormap(pcl[i,0]+0.5,pcl[i,1]+0.5,pcl[i,2]+0.5-0.0125)
-        xml_segments.append(xml_ball_segment.format(pcl[i,0],pcl[i,1],pcl[i,2], *color))
+        color = colormap(pcl[i, 0] + 0.5, pcl[i, 1] + 0.5, pcl[i, 2] + 0.5 - 0.0125)
+        xml_segments.append(xml_ball_segment.format(pcl[i, 0], pcl[i, 1], pcl[i, 2], *color))
     xml_segments.append(xml_tail)
 
-    xml_content = str.join('', xml_segments)
+    xml_content = str.join("", xml_segments)
 
-    with open(file_name, 'w') as f:
+    with open(file_name, "w") as f:
         f.write(xml_content)
-
-

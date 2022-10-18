@@ -1,15 +1,18 @@
 # Ref https://github.com/charlesq34/pointnet/blob/master/sem_seg/collect_indoor3d_data.py
 import os
 import sys
+
+
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 ROOT_DIR = os.path.dirname(BASE_DIR)
 sys.path.append(BASE_DIR)
 import indoor3d_util
 
-anno_paths = [line.rstrip() for line in open(os.path.join('/home/ubuntu/SSL43DMV/data_utils', 'meta/anno_paths.txt'))]
+
+anno_paths = [line.rstrip() for line in open(os.path.join("/home/ubuntu/SSL43DMV/data_utils", "meta/anno_paths.txt"))]
 anno_paths = [os.path.join(indoor3d_util.DATA_PATH, p) for p in anno_paths]
 
-output_folder = os.path.join('/home/ubuntu', 'stanford_indoor3d') 
+output_folder = os.path.join("/home/ubuntu", "stanford_indoor3d")
 if not os.path.exists(output_folder):
     os.mkdir(output_folder)
 
@@ -17,8 +20,8 @@ if not os.path.exists(output_folder):
 for anno_path in anno_paths:
     print(anno_path)
     try:
-        elements = anno_path.split('/')
-        out_filename = elements[-3]+'_'+elements[-2]+'.npy' # Area_1_hallway_1.npy
-        indoor3d_util.collect_point_label(anno_path, os.path.join(output_folder, out_filename), 'numpy')
+        elements = anno_path.split("/")
+        out_filename = elements[-3] + "_" + elements[-2] + ".npy"  # Area_1_hallway_1.npy
+        indoor3d_util.collect_point_label(anno_path, os.path.join(output_folder, out_filename), "numpy")
     except:
-        print(anno_path, 'ERROR!!')
+        print(anno_path, "ERROR!!")

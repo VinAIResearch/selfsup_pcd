@@ -3,12 +3,11 @@
 # This source code is licensed under the MIT license found in the
 # LICENSE file in the root directory of this source tree.
 
-from models.backbone.sparseconv.models.resnet import ResNetBase, get_norm
+import MinkowskiEngine.MinkowskiOps as me
+from MinkowskiEngine import MinkowskiReLU
 from models.backbone.sparseconv.models.modules.common import ConvType, NormType, conv, conv_tr
 from models.backbone.sparseconv.models.modules.resnet_block import BasicBlock, Bottleneck
-
-from MinkowskiEngine import MinkowskiReLU
-import MinkowskiEngine.MinkowskiOps as me
+from models.backbone.sparseconv.models.resnet import ResNetBase, get_norm
 
 
 class Res16UNetBase(ResNetBase):

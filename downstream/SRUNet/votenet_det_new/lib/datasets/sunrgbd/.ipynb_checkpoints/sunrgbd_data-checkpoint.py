@@ -13,18 +13,21 @@ Changed a way for data visualization (removed depdency on mayavi).
 Load depth with scipy.io
 '''
 
+import argparse
 import os
 import sys
-import numpy as np
-import sys
+
 import cv2
-import argparse
+import numpy as np
 from PIL import Image
+
+
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 sys.path.append(BASE_DIR)
 sys.path.append(os.path.join(BASE_DIR, '../utils/'))
 import pc_util
 import sunrgbd_utils
+
 
 DEFAULT_TYPE_WHITELIST = ['bed','table','sofa','chair','toilet','desk','dresser','night_stand','bookshelf','bathtub']
 
