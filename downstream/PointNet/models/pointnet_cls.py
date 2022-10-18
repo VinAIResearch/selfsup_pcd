@@ -1,17 +1,6 @@
-import os
-import random
-import sys
-
-import numpy as np
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
-
-
-BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-sys.path.append(BASE_DIR)
-sys.path.append(os.path.join(BASE_DIR, "models"))
-sys.path.append(os.path.join(BASE_DIR, "utils"))
 from pointnet_utils import STN3D_feature, STN3D_input, feature_transform_regularizer
 
 
@@ -59,7 +48,6 @@ class PointNet(nn.Module):
         )
 
     def forward(self, x):
-        batch_size = x.shape[0]
         num_points = x.shape[1]
         x = x.transpose(2, 1)
         T1 = self.stn1(x)
@@ -108,7 +96,6 @@ class PointNet_critical(nn.Module):
         )
 
     def forward(self, x):
-        batch_size = x.shape[0]
         num_points = x.shape[1]
         x = x.transpose(2, 1)
         T1 = self.stn1(x)
@@ -136,15 +123,3 @@ def get_loss(pred, target, feat_trans, reg_weight=0.001):
     return loss_cls + loss_reg * reg_weight
 
     return 0
-
-
-if __name__ == "__main__":
-    # print(nn.Conv1d(3,64,1).weight.size(),nn.Conv1d(3,64,1).bias.size() )
-    pointnet = PointNet(3, 10)
-    # pointnet.train()
-    data = torch.ones(4, 3, 1024)
-    # print(pointnet(data)[0])
-    with torch.no_grad():
-        pointnet.eval()
-        # print(pointnet)
-        print(pointnet.mlp1(data)[0])

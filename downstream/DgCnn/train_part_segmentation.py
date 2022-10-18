@@ -1,15 +1,16 @@
 import argparse
+import json
 import os
 import random
+
 import numpy as np
 import torch
 import torch.optim as optim
 import torch.utils.data
-from torch.utils.tensorboard import SummaryWriter
-import json
 from dgcnn_part_segmentation import DGCNN, get_loss
 from ShapeNetDataLoader import ShapeNetPartSegDataset
 from torch.optim.lr_scheduler import CosineAnnealingLR, StepLR
+from torch.utils.tensorboard import SummaryWriter
 from tqdm import tqdm
 from utils import copy_parameters, to_one_hot
 

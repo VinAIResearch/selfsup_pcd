@@ -1,31 +1,18 @@
 # Ref https://github.com/AnTao97/dgcnn.pytorch/blob/master/util.py
 # Ref https://github.com/hansen7/OcCo/blob/master/OcCo_Torch/utils/Torch_Utility.py
-import os
-import sys
-
-import numpy as np
 import torch
 import torch.nn as nn
-import torch.nn.functional as F
-
-
-BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-sys.path.append(BASE_DIR)
-sys.path.append(os.path.join(BASE_DIR, "../models"))
-from pointnet_part_seg import PointNet
 
 
 def copy_parameters(model, pretrained, verbose=True, part_seg=False):
     feat_dict = model.state_dict()
     # load pre_trained self-supervised
     pretrained_dict = pretrained
-    # print(feat_dict.keys())
     try:
         pretrained_dict = pretrained_dict["model_state_dict"]
         pretrained_dict = {k[12:]: v for k, v in pretrained_dict.items()}  # remove name module.
-    except:
+    except Exception:
         print("Not OcCo pretrained")
-    # print(pretrained_dict.keys())
     predict = {}
     if part_seg:
         for k, v in pretrained_dict.items():
@@ -99,36 +86,15 @@ def init_weights(m):
         torch.nn.init.xavier_uniform_(m.weight)
         try:
             torch.nn.init.zeros_(m.bias)
-        except:
+        except Exception:
             pass
         # print(m)
 
 
 def init_zeros(m):
     if isinstance(m, nn.Linear):
-        # intval = [-0.001, 0.001]
-        # weight = torch.from_numpy(np.random.choice(intval, m.weight.shape))
-        # bias = torch.from_numpy(np.random.choice(intval, m.bias.shape))
-        # with torch.no_grad():
-        #     m.weight.copy_(weight)
-        #     m.bias.copy_(bias)
-
-        # torch.nn.init.xavier_normal_(m.weight)
-        # torch.nn.init.zeros_(m.bias)
         torch.nn.init.constant_(m.bias, 1e-5)
-        # torch.nn.init.constant_(m.weight, 1e-3)
-        # torch.nn.init.uniform_(m.weight)
-        # torch.nn.init.uniform_(m.bias)
-
-        # torch.nn.init.ones_(m.bias)
         torch.nn.init.zeros_(m.weight)
     else:
         print("Wrong layer TNet")
         exit()
-        # print(m)
-
-
-if __name__ == "__main__":
-    classifier = PointNet(3, 50)
-    pretrained = torch.load("/vinai/bachtx12/pre_trained_3d_point/pre_trained_pointnet_epoch_500.pth")
-    copy_parameters(classifier, pretrained)

@@ -1,24 +1,12 @@
 import argparse
 import os
 import random
-import sys
-
 import torch
 import torch.optim as optim
 import torch.utils.data
 from torch.utils.tensorboard import SummaryWriter
-
-
-BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-sys.path.append(BASE_DIR)
-sys.path.append(os.path.join(BASE_DIR, "models"))
-sys.path.append(os.path.join(BASE_DIR, "utils"))
-sys.path.append(os.path.join(BASE_DIR, "data_utils"))
-
 import json
-
 import numpy as np
-import torch.nn.functional as F
 from pointnet_seg import PointNet, get_loss
 from S3DISDataLoader import S3DISDataset
 from tqdm import tqdm
@@ -52,7 +40,7 @@ def parse_args():
 def train():
     args = parse_args()
     print(args.manualSeed)
-    if args.manualSeed != None:
+    if args.manualSeed is not None:
         random.seed(args.manualSeed)
         torch.manual_seed(args.manualSeed)
         np.random.seed(args.manualSeed)
@@ -155,7 +143,7 @@ def train():
         writer.add_scalar("Acc/train", train_acc, epoch + 1)
 
     torch.save(classifier.state_dict(), "%s/seg_model.pth" % (path_checkpoints))
-    ## benchmark mIOU
+    # benchmark mIOU
     with torch.no_grad():
         total_correct = 0.0
         total_seen = 0.0

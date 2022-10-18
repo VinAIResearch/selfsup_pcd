@@ -1,19 +1,9 @@
-import os
-
-
-BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-sys.path.append(BASE_DIR)
-sys.path.append(os.path.join(BASE_DIR, "models"))
-sys.path.append(os.path.join(BASE_DIR, "utils"))
-sys.path.append(os.path.join(BASE_DIR, "data_utils"))
 import argparse
 import json
 import random
-import sys
-
+import os
 import numpy as np
 import torch
-import torch.nn.functional as F
 import torch.optim as optim
 import torch.utils.data
 from ModelNetDataLoader import ModelNetDataset, ModelNetDataset_H5PY
@@ -209,7 +199,7 @@ def train():
         writer.add_scalar("Acc/train", total_correct / total_point, epoch + 1)
         writer.add_scalar("Acc/test", test_acc, epoch + 1)
     torch.save(classifier.state_dict(), "%s/cls_model.pth" % (path_checkpoints))
-    ## Test
+    # Test
     with torch.no_grad():
         results = {}
         total_loss = 0.0

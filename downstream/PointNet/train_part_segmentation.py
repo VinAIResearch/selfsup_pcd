@@ -1,24 +1,12 @@
 import argparse
 import os
 import random
-import sys
-
 import numpy as np
 import torch
 import torch.optim as optim
 import torch.utils.data
 from torch.utils.tensorboard import SummaryWriter
-
-
-BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-sys.path.append(BASE_DIR)
-sys.path.append(os.path.join(BASE_DIR, "models"))
-sys.path.append(os.path.join(BASE_DIR, "utils"))
-sys.path.append(os.path.join(BASE_DIR, "data_utils"))
-
 import json
-
-import torch.nn.functional as F
 from pointnet_part_seg import PointNet, get_loss
 from ShapeNetDataLoader import ShapeNetPartSegDataset
 from tqdm import tqdm
@@ -51,7 +39,7 @@ def parse_args():
 def train():
     args = parse_args()
     print(args.manualSeed)
-    if args.manualSeed != None:
+    if args.manualSeed is not None:
         random.seed(args.manualSeed)
         torch.manual_seed(args.manualSeed)
         np.random.seed(args.manualSeed)
@@ -114,9 +102,6 @@ def train():
     LR_DECAY = args.lr_decay
     LR_DECAY_STEP = args.decay_step
 
-    best_acc = 0.0
-    best_epoch = 0
-    test_acc = 0
     for epoch in range(1, args.nepoch + 1):
         total_loss = 0.0
         total_seen = 0.0

@@ -1,6 +1,7 @@
 # Ref https://github.com/yanx27/Pointnet_Pointnet2_pytorch/blob/master/data_utils/S3DISDataLoader.py
 import os
 import os.path
+
 import h5py
 import indoor3d_util
 import numpy as np

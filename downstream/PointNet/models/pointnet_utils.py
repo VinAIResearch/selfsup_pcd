@@ -29,7 +29,6 @@ class STN3D_input(nn.Module):
         )
 
     def forward(self, x):
-        batch_size = x.shape[0]
         num_points = x.shape[2]
         x = self.mlp1(x)
         x = F.max_pool1d(x, num_points).squeeze(2)
@@ -66,7 +65,6 @@ class STN3D_feature(nn.Module):
         )
 
     def forward(self, x):
-        batch_size = x.shape[0]
         num_points = x.shape[2]
         x = self.mlp1(x)
         x = F.max_pool1d(x, num_points).squeeze(2)
@@ -79,19 +77,8 @@ class STN3D_feature(nn.Module):
 
 def feature_transform_regularizer(trans):
     d = trans.size()[1]
-    batchsize = trans.size()[0]
     I = torch.eye(d)[None, :, :]
     if trans.is_cuda:
         I = I.cuda()
     loss = torch.sum(torch.norm(torch.bmm(trans, trans.transpose(2, 1)) - I, dim=(1, 2)) ** 2) / 2
     return loss
-
-
-if __name__ == "__main__":
-    stn = STN3D_cv2d(3)
-    x = torch.rand(12, 1024, 3)
-    # cv1 = nn.Conv2d(1,64,(1,3))
-    print((stn(x)).size())
-    # print(cv1.bias.data.size())
-    # print(cv1.weight.data.size())
-    # print(cv1(x).size())

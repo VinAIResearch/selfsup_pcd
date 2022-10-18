@@ -1,16 +1,17 @@
 import argparse
+import json
 import os
 import random
+
 import numpy as np
+import sklearn.metrics as metrics
 import torch
 import torch.optim as optim
 import torch.utils.data
-from torch.utils.tensorboard import SummaryWriter
-import json
-import sklearn.metrics as metrics
 from dgcnn_sem_segmentation import DGCNN, get_loss
 from S3DISDataLoader import S3DISDataset
 from torch.optim.lr_scheduler import CosineAnnealingLR, StepLR
+from torch.utils.tensorboard import SummaryWriter
 from tqdm import tqdm
 from utils import calculate_sem_IoU, copy_parameters
 
