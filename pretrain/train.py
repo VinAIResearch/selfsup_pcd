@@ -1,10 +1,11 @@
 import argparse
 import json
 import os
+
 import torch
 import torch.nn.functional as F
-from models import DGCNN_point_global, PointNet_point_global, feature_transform_regularizer, Model2D_pixel
 from data_utils import ModelNetSSLDataset
+from models import DGCNN_point_global, Model2D_pixel, PointNet_point_global, feature_transform_regularizer
 from torch import optim
 from torch.optim.lr_scheduler import CosineAnnealingLR, StepLR
 from torch.utils.data import DataLoader

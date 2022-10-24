@@ -2,13 +2,14 @@ import argparse
 import json
 import os
 import random
+
 import numpy as np
 import sklearn.metrics as metrics
 import torch
 import torch.optim as optim
 import torch.utils.data
-from models import DGCNN, get_loss
 from data_utils import ModelNetDataset, ModelNetDataset_H5PY, ScanObjectNNDataset
+from models import DGCNN, get_loss
 from torch.optim.lr_scheduler import CosineAnnealingLR, StepLR
 from torch.utils.tensorboard import SummaryWriter
 from tqdm import tqdm

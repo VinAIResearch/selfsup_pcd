@@ -1,11 +1,13 @@
 # Ref https://github.com/yanx27/Pointnet_Pointnet2_pytorch/blob/master/data_utils/S3DISDataLoader.py
 import os
 import os.path
+
 import h5py
-from .indoor3d_util import room2blocks_wrapper_normalized
 import numpy as np
 import torch
 import torch.utils.data as data
+
+from .indoor3d_util import room2blocks_wrapper_normalized
 
 
 class S3DISDataset(data.Dataset):

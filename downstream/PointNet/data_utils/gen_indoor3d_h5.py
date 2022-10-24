@@ -1,5 +1,6 @@
 # Ref https://github.com/charlesq34/pointnet/blob/master/sem_seg/gen_indoor3d_h5.py
 import os
+
 import data_prep_util
 import indoor3d_util
 import numpy as np

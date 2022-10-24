@@ -1,10 +1,11 @@
 import argparse
 import datetime
+
 import numpy as np
 import torch
 import torch.utils.data
-from models import DGCNN, DGCNN_jigsaw
 from data_utils import ModelNetDataset, ModelNetDataset_H5PY, ScanObjectNNDataset
+from models import DGCNN, DGCNN_jigsaw
 from sklearn import metrics, svm
 from sklearn.model_selection import GridSearchCV
 from tqdm import tqdm

@@ -1,14 +1,15 @@
 import argparse
+import json
 import os
 import random
+
 import numpy as np
 import torch
 import torch.optim as optim
 import torch.utils.data
-from torch.utils.tensorboard import SummaryWriter
-import json
-from models import PointNet_part_seg, get_loss
 from data_utils import ShapeNetPartSegDataset
+from models import PointNet_part_seg, get_loss
+from torch.utils.tensorboard import SummaryWriter
 from tqdm import tqdm
 from utils import bn_momentum_adjust, copy_parameters, init_weights, init_zeros, to_one_hot
 

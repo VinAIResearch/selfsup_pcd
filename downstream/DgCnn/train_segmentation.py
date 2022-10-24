@@ -8,8 +8,8 @@ import sklearn.metrics as metrics
 import torch
 import torch.optim as optim
 import torch.utils.data
-from models import DGCNN_seg, get_loss
 from data_utils import S3DISDataset
+from models import DGCNN_seg, get_loss
 from torch.optim.lr_scheduler import CosineAnnealingLR, StepLR
 from torch.utils.tensorboard import SummaryWriter
 from tqdm import tqdm

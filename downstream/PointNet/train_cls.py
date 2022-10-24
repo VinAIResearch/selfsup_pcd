@@ -1,7 +1,8 @@
 import argparse
 import json
-import random
 import os
+import random
+
 import numpy as np
 import torch
 import torch.optim as optim

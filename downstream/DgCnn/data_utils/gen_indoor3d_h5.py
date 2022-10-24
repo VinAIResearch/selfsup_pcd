@@ -1,8 +1,10 @@
 # Ref https://github.com/charlesq34/pointnet/blob/master/sem_seg/gen_indoor3d_h5.py
 import os
+
 import data_prep_util
-from .indoor3d_util import room2blocks_wrapper_normalized
 import numpy as np
+
+from .indoor3d_util import room2blocks_wrapper_normalized
 
 
 # Constants

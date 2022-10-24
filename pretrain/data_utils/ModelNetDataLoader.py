@@ -1,20 +1,20 @@
 import glob
 import os
 import os.path
+
 import numpy as np
 import torch
 import torch.utils.data as data
-from .data_utils import (
+from PIL import Image
+from torchvision import transforms
+
+from .data_utils import (  # jitter_point_cloud,; rotate_point_cloud,
     center_point_cloud,
     farthest_pair_sample,
-    jitter_point_cloud,
     normalize_point_cloud,
-    rotate_point_cloud,
     separate_point_sample,
     translate_pointcloud,
 )
-from PIL import Image
-from torchvision import transforms
 
 
 test_transform = transforms.Compose([transforms.ToTensor()])
