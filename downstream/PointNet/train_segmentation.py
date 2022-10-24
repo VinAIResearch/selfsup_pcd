@@ -7,8 +7,8 @@ import torch.utils.data
 from torch.utils.tensorboard import SummaryWriter
 import json
 import numpy as np
-from pointnet_seg import PointNet, get_loss
-from S3DISDataLoader import S3DISDataset
+from models import PointNet_seg, get_loss
+from data_utils import S3DISDataset
 from tqdm import tqdm
 from utils import bn_momentum_adjust, copy_parameters, init_weights, init_zeros
 
@@ -80,7 +80,7 @@ def train():
 
     writer = SummaryWriter(path_runs)
 
-    classifier = PointNet(9, num_classes)
+    classifier = PointNet_seg(9, num_classes)
     classifier.apply(init_weights)
     classifier.stn1.mlp2[-1].apply(init_zeros)
     classifier.stn2.mlp2[-1].apply(init_zeros)

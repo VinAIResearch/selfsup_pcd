@@ -1,6 +1,5 @@
 # Ref https://github.com/charlesq34/pointnet/blob/master/sem_seg/collect_indoor3d_data.py
 import os
-
 import indoor3d_util
 
 

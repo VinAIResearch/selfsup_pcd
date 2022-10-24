@@ -1,12 +1,12 @@
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
-from pointnet_utils import STN3D_feature, STN3D_input, feature_transform_regularizer
+from .pointnet_utils import STN3D_feature, STN3D_input, feature_transform_regularizer
 
 
-class PointNet(nn.Module):
+class PointNet_part_seg(nn.Module):
     def __init__(self, input_channels, num_classes):
-        super(PointNet, self).__init__()
+        super(PointNet_part_seg, self).__init__()
         self.input_channels = input_channels
         self.stn1 = STN3D_input(input_channels)
         self.stn2 = STN3D_feature(128)
@@ -82,16 +82,3 @@ def get_loss(pred, target, feat_trans, reg_weight=0.001):
     return loss_cls + loss_reg * reg_weight
 
     return 0
-
-
-if __name__ == "__main__":
-    # print(nn.Conv1d(3,64,1).weight.size(),nn.Conv1d(3,64,1).bias.size() )
-    pointnet = PointNet(3, 50)
-    # pointnet.train()
-    labels = torch.ones(4, 16)
-    data = torch.ones(4, 1024, 3)
-    # print(pointnet(data)[0])
-    with torch.no_grad():
-        pointnet.eval()
-        # print(pointnet)
-        print(pointnet(data, labels)[0].size())

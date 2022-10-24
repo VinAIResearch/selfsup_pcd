@@ -1,7 +1,7 @@
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
-from dgcnn_untils import get_graph_feature
+from .dgcnn_untils import get_graph_feature
 
 
 class DGCNN(nn.Module):

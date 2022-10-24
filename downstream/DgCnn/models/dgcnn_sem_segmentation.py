@@ -1,12 +1,12 @@
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
-from dgcnn_untils import get_graph_feature
+from .dgcnn_untils import get_graph_feature
 
 
-class DGCNN(nn.Module):
+class DGCNN_seg(nn.Module):
     def __init__(self, args):
-        super(DGCNN, self).__init__()
+        super(DGCNN_seg, self).__init__()
         self.args = args
         self.k = args.k
 

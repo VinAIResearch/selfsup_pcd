@@ -7,8 +7,8 @@ import numpy as np
 import torch
 import torch.optim as optim
 import torch.utils.data
-from dgcnn_part_segmentation import DGCNN, get_loss
-from ShapeNetDataLoader import ShapeNetPartSegDataset
+from models import DGCNN_part_seg, get_loss
+from data_utils import ShapeNetPartSegDataset
 from torch.optim.lr_scheduler import CosineAnnealingLR, StepLR
 from torch.utils.tensorboard import SummaryWriter
 from tqdm import tqdm
@@ -112,7 +112,7 @@ def train():
 
     writer = SummaryWriter(path_runs)
 
-    classifier = DGCNN(args, num_part_classes)
+    classifier = DGCNN_part_seg(args, num_part_classes)
     if args.model_path != "":
         classifier = copy_parameters(classifier, torch.load(args.model_path), part_seg=True)
     classifier.cuda()

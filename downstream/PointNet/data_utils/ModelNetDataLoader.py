@@ -6,7 +6,7 @@ import h5py
 import numpy as np
 import torch
 import torch.utils.data as data
-from data_utils import center_point_cloud, jitter_point_cloud, normalize_point_cloud, rotate_point_cloud
+from .data_utils import center_point_cloud, jitter_point_cloud, normalize_point_cloud, rotate_point_cloud
 from torchvision import transforms
 
 

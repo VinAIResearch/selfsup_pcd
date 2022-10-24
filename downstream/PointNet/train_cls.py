@@ -6,9 +6,8 @@ import numpy as np
 import torch
 import torch.optim as optim
 import torch.utils.data
-from ModelNetDataLoader import ModelNetDataset, ModelNetDataset_H5PY
-from pointnet_cls import PointNet, get_loss
-from ScanObjectNNDataLoader import ScanObjectNNDataset
+from data_utils import ModelNetDataset, ModelNetDataset_H5PY, ScanObjectNNDataset
+from models import PointNet, get_loss
 from torch.utils.tensorboard import SummaryWriter
 from tqdm import tqdm
 from utils import bn_momentum_adjust, copy_parameters, init_weights, init_zeros

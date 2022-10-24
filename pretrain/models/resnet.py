@@ -88,7 +88,7 @@ class Model2D_pixel_224(nn.Module):
         self.num_views = num_views
         modules = []
         resnet = resnet50()
-        resnet.load_state_dict(torch.load("/vinai/bachtx12/resnet50-0676ba61.pth"))
+        resnet.load_state_dict(torch.load("resnet50-0676ba61.pth"))
         for name, module in resnet.named_children():
             if (
                 not isinstance(module, nn.Linear)

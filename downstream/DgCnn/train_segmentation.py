@@ -8,8 +8,8 @@ import sklearn.metrics as metrics
 import torch
 import torch.optim as optim
 import torch.utils.data
-from dgcnn_sem_segmentation import DGCNN, get_loss
-from S3DISDataLoader import S3DISDataset
+from models import DGCNN_seg, get_loss
+from data_utils import S3DISDataset
 from torch.optim.lr_scheduler import CosineAnnealingLR, StepLR
 from torch.utils.tensorboard import SummaryWriter
 from tqdm import tqdm
@@ -91,7 +91,7 @@ def train():
 
     writer = SummaryWriter(path_runs)
 
-    classifier = DGCNN(args)
+    classifier = DGCNN_seg(args)
     # load pre-trained model
     if args.model_path != "":
         classifier = copy_parameters(classifier, torch.load(args.model_path))

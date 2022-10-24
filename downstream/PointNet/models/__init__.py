@@ -1,8 +1,3 @@
-import sys
-import os
-
-
-BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-sys.path.append(BASE_DIR)
-sys.path.append(os.path.join(BASE_DIR, "models"))
-sys.path.append(os.path.join(BASE_DIR, "utils"))
+from .pointnet_cls import PointNet, get_loss, PointNet_critical
+from .pointnet_part_seg import PointNet_part_seg
+from .pointnet_seg import PointNet_seg

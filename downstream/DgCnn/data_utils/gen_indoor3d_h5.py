@@ -1,8 +1,7 @@
 # Ref https://github.com/charlesq34/pointnet/blob/master/sem_seg/gen_indoor3d_h5.py
 import os
-
 import data_prep_util
-import indoor3d_util
+from .indoor3d_util import room2blocks_wrapper_normalized
 import numpy as np
 
 
@@ -75,7 +74,7 @@ def insert_batch(data, label, last_batch=False):
 sample_cnt = 0
 for i, data_label_filename in enumerate(data_label_files):
     print(data_label_filename)
-    data, label = indoor3d_util.room2blocks_wrapper_normalized(
+    data, label = room2blocks_wrapper_normalized(
         data_label_filename, NUM_POINT, block_size=1.0, stride=0.5, random_sample=False, sample_num=None
     )
     print("{0}, {1}".format(data.shape, label.shape))

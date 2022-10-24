@@ -1,11 +1,10 @@
 import glob
 import os.path
-
 import h5py
 import numpy as np
 import torch
 import torch.utils.data as data
-from data_utils import center_point_cloud, normalize_point_cloud, translate_pointcloud
+from .data_utils import center_point_cloud, normalize_point_cloud, translate_pointcloud
 
 
 class ModelNetDataset_H5PY(data.Dataset):

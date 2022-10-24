@@ -1,9 +1,8 @@
 # Ref https://github.com/yanx27/Pointnet_Pointnet2_pytorch/blob/master/data_utils/S3DISDataLoader.py
 import os
 import os.path
-
 import h5py
-import indoor3d_util
+from .indoor3d_util import room2blocks_wrapper_normalized
 import numpy as np
 import torch
 import torch.utils.data as data
@@ -62,15 +61,8 @@ class S3DISDatasetWholeScene:
 
     def __getitem__(self, index):
         room_path = os.path.join(self.root, self.file_list[index])
-        data_room, label_room = indoor3d_util.room2blocks_wrapper_normalized(room_path, self.block_points)
+        data_room, label_room = room2blocks_wrapper_normalized(room_path, self.block_points)
         return torch.from_numpy(data_room), torch.from_numpy(label_room)
 
     def __len__(self):
         return len(self.file_list)
-
-
-if __name__ == "__main__":
-    d = S3DISDataset(root="../indoor3d_sem_seg_hdf5_data")
-    print(len(d))
-    data = d[0]
-    print(data[0].size(), data[1].size())

@@ -7,8 +7,8 @@ import torch.optim as optim
 import torch.utils.data
 from torch.utils.tensorboard import SummaryWriter
 import json
-from pointnet_part_seg import PointNet, get_loss
-from ShapeNetDataLoader import ShapeNetPartSegDataset
+from models import PointNet_part_seg, get_loss
+from data_utils import ShapeNetPartSegDataset
 from tqdm import tqdm
 from utils import bn_momentum_adjust, copy_parameters, init_weights, init_zeros, to_one_hot
 
@@ -81,7 +81,7 @@ def train():
 
     writer = SummaryWriter(path_runs)
 
-    classifier = PointNet(3, num_part_classes)
+    classifier = PointNet_part_seg(3, num_part_classes)
     classifier.apply(init_weights)
     classifier.stn1.mlp2[-1].apply(init_zeros)
     classifier.stn2.mlp2[-1].apply(init_zeros)

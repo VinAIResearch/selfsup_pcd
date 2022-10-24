@@ -1,8 +1,4 @@
-import os
-import sys
-
-
-BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-ROOT_DIR = os.path.dirname(BASE_DIR)
-sys.path.append(BASE_DIR)
-sys.path.append(os.path.join(ROOT_DIR, "utils"))
+from .ModelNetDataLoader import ModelNetDataset, ModelNetDataset_H5PY
+from .ScanObjectNNDataLoader import ScanObjectNNDataset
+from .ShapeNetDataLoader import ShapeNetPartSegDataset
+from .S3DISDataLoader import S3DISDataset
